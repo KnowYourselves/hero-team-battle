@@ -37,8 +37,7 @@ class Powerstats(BaseModel):
     def filiation_coefficient(self) -> float:
         return self.__filiation_coefficient
 
-    @filiation_coefficient.setter
-    def filiation_coefficient(self, value: float) -> None:
+    def set_filiation_coefficient(self, value: float) -> None:
         self.__filiation_coefficient = value
 
 
@@ -53,6 +52,9 @@ class Hero(BaseModel):
         super().__init__(**data)
         self.__health_points = self.get_base_health_points()
 
+    def __str__(self) -> str:
+        return f"{self.name} ({round(self.health_points, 2)})"
+
     def get_base_health_points(self) -> float:
         stats_coef = (
             self.powerstats.strength * 0.8
@@ -66,9 +68,8 @@ class Hero(BaseModel):
     def health_points(self) -> float:
         return self.__health_points
 
-    @health_points.setter
-    def health_points(self, value: float) -> None:
-        self.__health_points = min(0, self.__health_points, value)
+    def set_health_points(self, value: float) -> None:
+        self.__health_points = max(0, value)
 
     def reset_health_points(self) -> None:
         self.__health_points = self.get_base_health_points()
@@ -99,7 +100,7 @@ class Hero(BaseModel):
 
     def attack(self, other: "Hero") -> tuple[str, float]:
         attack_name, health_points_lost = self.get_random_attack()
-        other.health_points -= health_points_lost
+        other.set_health_points(other.health_points - health_points_lost)
         return attack_name, health_points_lost
 
     def get_random_attack(self) -> tuple[str, float]:
@@ -129,6 +130,5 @@ class HeroTeam(BaseModel):
 
     def set_filiation_coefficient(self) -> None:
         for hero in self.heroes:
-            hero.powerstats.filiation_coefficient = hero.get_filiation_coefficient(
-                self.alignment
-            )
+            filiation_coefficient = hero.get_filiation_coefficient(self.alignment)
+            hero.powerstats.set_filiation_coefficient(filiation_coefficient)
