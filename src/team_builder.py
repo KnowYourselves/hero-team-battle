@@ -22,21 +22,20 @@ class TeamBuilder:
     def get_five_random_heroes(self) -> list[Hero]:
         heroes: list[Hero] = []
         excluded: set[int] = set()
-        while len(heroes) < 5:
-            hero_id = self.get_random_hero_id(excluded)
-            if hero_id in excluded:
-                continue
-
-            hero = self.get_hero(hero_id)
-            if hero:
-                heroes.append(hero)
+        for _ in range(5):
+            hero = self.get_hero(excluded)
+            heroes.append(hero)
         return heroes
 
-    def get_hero(self, hero_id: int) -> Hero | None:
-        try:
-            return self.api.get_hero(hero_id)
-        except ValidationError:
-            return None
+    def get_hero(self, excluded: set[int]) -> Hero:
+        while len(excluded) < 731:
+            try:
+                hero_id = self.get_random_hero_id(excluded)
+                excluded.add(hero_id)
+                return self.api.get_hero(hero_id)
+            except ValidationError:
+                continue
+        raise ValueError("No more heroes to choose from")
 
     @staticmethod
     def get_random_hero_id(excluded: set[int]) -> int:
