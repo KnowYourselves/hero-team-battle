@@ -1,11 +1,9 @@
-# standard library
-import os
-
 # others libraries
 from dotenv import load_dotenv
 
-load_dotenv()
-
+from src.team_battle import TeamBattle
 
 if __name__ == "__main__":
-    print(os.getenv("ENV_VAR"))
+    load_dotenv()
+    battle = TeamBattle()
+    battle.battle()
