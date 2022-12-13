@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # standard library
 import math
 import random
@@ -62,7 +64,7 @@ class Hero(BaseModel):
             + self.powerstats.power
         ) / 2
         actual_stamina_coef = 1 + self.powerstats.actual_stamina / 10
-        return stats_coef * actual_stamina_coef + 100
+        return math.floor(stats_coef * actual_stamina_coef) + 100
 
     @property
     def health_points(self) -> float:
@@ -98,7 +100,7 @@ class Hero(BaseModel):
             + self.powerstats.strength * 0.2
         ) * self.powerstats.filiation_coefficient
 
-    def attack(self, other: "Hero") -> tuple[str, float]:
+    def attack(self, other: Hero) -> tuple[str, float]:
         attack_name, health_points_lost = self.get_random_attack()
         other.set_health_points(other.health_points - health_points_lost)
         return attack_name, health_points_lost
