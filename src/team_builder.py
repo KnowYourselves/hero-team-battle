@@ -8,6 +8,16 @@ from src.api import SuperheroAPI
 from src.models import Hero
 from src.models import HeroTeam
 
+TEAM_NAMES = (
+    "Colo-Colo",
+    "Universidad de Chile",
+    "Universidad Católica",
+    "Cobreloa",
+    "Palestino",
+    "Santiago Wanderers",
+    "Tricolor de Paine",
+)
+
 
 class TeamBuilder:
     def __init__(self) -> None:
@@ -15,7 +25,7 @@ class TeamBuilder:
 
     def build_random_team(self) -> HeroTeam:
         heroes = self.get_five_random_heroes()
-        team = HeroTeam(heroes=heroes)
+        team = HeroTeam(name=random.choice(TEAM_NAMES), heroes=heroes)
         team.set_filiation_coefficient()
         return team
 

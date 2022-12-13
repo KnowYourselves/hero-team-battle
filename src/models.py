@@ -53,7 +53,7 @@ class Hero(BaseModel):
         self.__health_points = self.get_base_health_points()
 
     def __str__(self) -> str:
-        return f"{self.name} ({round(self.health_points, 2)})"
+        return f"{self.name} ({round(self.health_points, 2)} HP)"
 
     def get_base_health_points(self) -> float:
         stats_coef = (
@@ -120,13 +120,24 @@ class Hero(BaseModel):
 
 
 class HeroTeam(BaseModel):
+    name: str
     heroes: list[Hero] = Field(..., min_items=5, max_items=5, unique_items=True)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
 
     @property
     def alignment(self) -> str:
         alignments = Counter([hero.biography.alignment for hero in self.heroes])
         alignment, _ = alignments.most_common(1)[0]
         return alignment
+
+    @property
+    def active_hero(self) -> Hero | None:
+        for hero in self.heroes:
+            if hero.health_points > 0:
+                return hero
+        return None
 
     def set_filiation_coefficient(self) -> None:
         for hero in self.heroes:
