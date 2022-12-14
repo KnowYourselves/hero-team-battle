@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-# standard library
-import os
-
 from src.mailer import Mailer
 from src.models import Hero
 from src.models import HeroTeam

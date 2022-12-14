@@ -20,6 +20,15 @@ repos:
         stages:
           - commit
 
+      - id: flake8
+        name: lint code with flake8
+        entry: poetry run flake8
+        types:
+          - python
+        language: system
+        stages:
+          - commit
+
       - id: mypy
         name: test types
         entry: poetry run mypy
