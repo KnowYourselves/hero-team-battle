@@ -21,7 +21,7 @@ class Settings(BaseModel):
 
 settings = Settings(
     team_size=int(os.environ.get("TEAM_SIZE", 5)),
-    hero_amount=int(os.environ.get("HERO_AMOUNT", 5)),
+    hero_amount=int(os.environ.get("HERO_AMOUNT", 731)),
     hero_base_url=os.environ.get("SUPERHERO_API_BASE_URL", ""),
     hero_api_key=os.environ.get("SUPERHERO_API_KEY", ""),
     mailgun_api_key=os.environ.get("MAILGUN_API_KEY", ""),
