@@ -30,14 +30,7 @@ class Powerstats(BaseModel):
     power: int
     combat: int
     actual_stamina: int = Field(default_factory=lambda: random.randint(0, 10))
-    __filiation_coefficient: float = PrivateAttr(0)
-
-    @property
-    def filiation_coefficient(self) -> float:
-        return self.__filiation_coefficient
-
-    def set_filiation_coefficient(self, value: float) -> None:
-        self.__filiation_coefficient = value
+    filiation_coefficient: float = 1
 
 
 class Hero(BaseModel):
@@ -146,4 +139,4 @@ class HeroTeam(BaseModel):
     def set_filiation_coefficient(self) -> None:
         for hero in self.heroes:
             filiation_coefficient = hero.get_filiation_coefficient(self.alignment)
-            hero.powerstats.set_filiation_coefficient(filiation_coefficient)
+            hero.powerstats.filiation_coefficient = filiation_coefficient
