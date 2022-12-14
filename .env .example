@@ -1,0 +1,13 @@
+# Superhero API
+SUPERHERO_API_BASE_URL=https://www.superheroapi.com/
+SUPERHERO_API_KEY=<your token>
+
+# System Settings
+TEAM_SIZE=5
+HERO_AMOUNT=731
+
+# Mailgun
+MAILGUN_API_BASE_URL=<mailgun base url>
+MAILGUN_API_KEY=<mailgun api key>
+MAILGUN_SENDER=<mailgun sender>
+EMAIL_DESTINATION=<your email>

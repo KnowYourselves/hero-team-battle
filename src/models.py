@@ -11,13 +11,10 @@ from pydantic import BaseModel
 from pydantic import Field
 from pydantic import PrivateAttr
 
+from src.settings import settings
+
 # typing
 from typing import Any
-
-
-class APIConfig(BaseModel):
-    base_url: str
-    api_key: str
 
 
 class Biography(BaseModel):
@@ -55,7 +52,7 @@ class Hero(BaseModel):
         self.__health_points = self.get_base_health_points()
 
     def __str__(self) -> str:
-        return f"{self.name} ({round(self.health_points, 2)} HP)"
+        return f"{self.name}"
 
     def get_base_health_points(self) -> float:
         stats_coef = (
@@ -123,7 +120,12 @@ class Hero(BaseModel):
 
 class HeroTeam(BaseModel):
     name: str
-    heroes: list[Hero] = Field(..., min_items=5, max_items=5, unique_items=True)
+    heroes: list[Hero] = Field(
+        ...,
+        min_items=settings.team_size,
+        max_items=settings.team_size,
+        unique_items=True,
+    )
 
     def __str__(self) -> str:
         return f"{self.name}"

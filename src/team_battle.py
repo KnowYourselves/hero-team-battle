@@ -23,27 +23,36 @@ class TeamBattle:
 
     def battle(self) -> None:
         print(f"{self.team_alpha} V/S {self.team_beta}\n")
+
         while self.team_alpha.active_hero and self.team_beta.active_hero:
             winner = self.hero_fight(
                 self.team_alpha.active_hero,
                 self.team_beta.active_hero,
             )
             winner.reset_health_points()
+
         winner_team = self.team_alpha if self.team_alpha.active_hero else self.team_beta
-        self.team_battle_log.log_winner(winner_team)
         print(f"Winner is {winner_team}!")
 
+        print("Sending report...", end="", flush=True)
+        self.team_battle_log.log_winner(winner_team)
+        self.team_battle_log.send_report()
+        print(" Done!")
+
     def hero_fight(self, hero_alpha: Hero, hero_beta: Hero) -> Hero:
-        battle_log = self.team_battle_log.log_battle(hero_alpha, hero_beta)
         print(f"\t{hero_alpha} V/S {hero_beta}")
+
+        battle_log = self.team_battle_log.log_battle(hero_alpha, hero_beta)
         heroes = [hero_alpha, hero_beta]
         current_hero_index = random.randint(0, 1)
         while hero_alpha.health_points > 0 and hero_beta.health_points > 0:
             self.hero_attack(heroes, current_hero_index, battle_log)
             current_hero_index = (1 + current_hero_index) % 2
         winner = heroes[0] if heroes[0].health_points > 0 else heroes[1]
-        battle_log.log_winner(winner)
-        print(f"\tWinner is {winner} from {self.get_team_from_hero(winner)}!\n")
+        winner_team = self.get_team_from_hero(winner)
+        battle_log.log_winner(winner, winner_team)
+
+        print(f"\tWinner is {winner} from {winner_team}!\n")
         return winner
 
     def hero_attack(
