@@ -66,29 +66,33 @@ class Hero(BaseModel):
     def reset_health_points(self) -> None:
         self.__health_points = self.get_base_health_points()
 
-    @property
-    def mental_attack(self) -> float:
+    def get_base_mental_attack(self) -> float:
         return (
-            self.powerstats.intelligence * 0.8
+            self.powerstats.intelligence * 0.7
             + self.powerstats.speed * 0.2
             + self.powerstats.combat * 0.1
         ) * self.powerstats.filiation_coefficient
 
-    @property
-    def strong_attack(self) -> float:
+    def get_base_strong_attack(self) -> float:
         return (
             self.powerstats.strength * 0.6
             + self.powerstats.power * 0.2
             + self.powerstats.combat * 0.2
         ) * self.powerstats.filiation_coefficient
 
-    @property
-    def fast_attack(self) -> float:
+    def get_base_fast_attack(self) -> float:
         return (
             self.powerstats.speed * 0.55
             + self.powerstats.durability * 0.25
             + self.powerstats.strength * 0.2
         ) * self.powerstats.filiation_coefficient
+
+    def get_final_attack(self, base: float) -> int:
+        return math.floor(
+            (2 * base + self.powerstats.actual_stamina)
+            / 1.1
+            * self.powerstats.filiation_coefficient
+        )
 
     def attack(self, other: Hero) -> tuple[str, float]:
         attack_name, health_points_lost = self.get_random_attack()
@@ -100,9 +104,9 @@ class Hero(BaseModel):
 
     def get_possible_attacks(self) -> dict[str, float]:
         return {
-            "mental_attack": self.mental_attack,
-            "strong_attack": self.strong_attack,
-            "fast_attack": self.fast_attack,
+            "mental_attack": self.get_final_attack(self.get_base_mental_attack()),
+            "strong_attack": self.get_final_attack(self.get_base_strong_attack()),
+            "fast_attack": self.get_final_attack(self.get_base_fast_attack()),
         }
 
     def get_filiation_coefficient(self, alignment: str) -> float:
