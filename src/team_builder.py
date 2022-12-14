@@ -28,12 +28,12 @@ class TeamBuilder:
         self.api = SuperheroAPI()
 
     def build_random_team(self) -> HeroTeam:
-        heroes = self.get_five_random_heroes()
+        heroes = self.get_random_heroes()
         team = HeroTeam(name=random.choice(TEAM_NAMES), heroes=heroes)
         team.set_filiation_coefficient()
         return team
 
-    def get_five_random_heroes(self) -> list[Hero]:
+    def get_random_heroes(self) -> list[Hero]:
         heroes: list[Hero] = []
         excluded: set[int] = set()
         for _ in range(settings.team_size):
